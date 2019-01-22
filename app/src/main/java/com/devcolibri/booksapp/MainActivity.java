@@ -1,16 +1,24 @@
 package com.devcolibri.booksapp;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 
-import android.support.v7.app.AppCompatActivity;
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private BooksRecyclerAdapter booksAdapter;
+    private BookService bookService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,34 +27,41 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        BooksRecyclerAdapter adapter = new BooksRecyclerAdapter((v) -> {
+        booksAdapter = new BooksRecyclerAdapter((v) -> {
             // TODO добавить переход на следующую Activity
         });
-        recyclerView.setAdapter(adapter);
-        adapter.setItems(getDataList());
+        recyclerView.setAdapter(booksAdapter);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BookService.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        bookService = retrofit.create(BookService.class);
+
+        loadBooks();
     }
 
-    private List<Book> getDataList() {
-        return Arrays.asList(
-                new Book(1, "https://drive.google.com/uc?id=1OF9uLAkVCXQbqMyC2JF3XJ-JrZQd9Ssp",
-                         "Чистый код: создание, анализ и рефакторинг",
-                         "Чистый код - это круто"),
+    @SuppressLint("StaticFieldLeak")
+    private void loadBooks() {
+        new AsyncTask<Void, Void, List<Book>>() {
+            @Override
+            protected List<Book> doInBackground(Void... voids) {
+                try {
+                    return bookService.getBooks().execute().body();
+                } catch (IOException e) {
+                    return null;
+                }
+            }
 
-                new Book(2, "https://drive.google.com/uc?id=1t1iB3JG8peBOJmDFUGki3mh27rqcIimr",
-                         "Совершенный код. Мастер-класс",
-                         "Совершенный - это круто"),
-
-                new Book(3, "https://drive.google.com/uc?id=1WvpeEDJBGUMmlycgc9ChswZtwFQUHQky",
-                         "Приемы объектно-ориентированного проектирования. Паттерны проектирования",
-                         "Паттерны - это круто."),
-
-                new Book(4, "https://drive.google.com/uc?id=1CJAD4JQKKJyEkLSvZk3fN8wjiQ1x2Jn7",
-                         "Искусство программирования. Том 1. Выпуск 1",
-                         "Программирование - это круто"),
-
-                new Book(5, "https://drive.google.com/uc?id=12m-GCnsdosdum8ocrcgVn5FzvTQUz_hi",
-                         "Рефакторинг. Улучшение проекта существующего кода",
-                         "Рефакторинг - это круто.")
-        );
+            @Override
+            protected void onPostExecute(List<Book> books) {
+                if(books != null) {
+                    booksAdapter.setItems(books);
+                } else {
+                    Toast.makeText(MainActivity.this, "Произошла ошибка", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
     }
 }

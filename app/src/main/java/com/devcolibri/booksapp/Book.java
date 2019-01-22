@@ -1,7 +1,10 @@
 package com.devcolibri.booksapp;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Book {
     private long id;
+    @SerializedName("image_url")
     private String imageUrl;
     private String title;
     private String description;
