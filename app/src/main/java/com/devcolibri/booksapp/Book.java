@@ -1,8 +1,13 @@
 package com.devcolibri.booksapp;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Book {
+    @PrimaryKey
     private long id;
     @SerializedName("image_url")
     private String imageUrl;

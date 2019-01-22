@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BooksRecyclerAdapter booksAdapter;
     private BookService bookService;
+    private BookDao bookDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
         bookService = retrofit.create(BookService.class);
 
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "book-database").build();
+        bookDao = db.getBookDao();
+
         loadBooks();
     }
 
@@ -48,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected List<Book> doInBackground(Void... voids) {
                 try {
-                    return bookService.getBooks().execute().body();
+                    List<Book> books = bookService.getBooks().execute().body();
+                    bookDao.insertBooks(books);
+                    return bookDao.getBooks();
                 } catch (IOException e) {
-                    return null;
+                    return bookDao.getBooks();
                 }
             }
 
