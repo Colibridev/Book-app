@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,8 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        booksAdapter = new BooksRecyclerAdapter((v) -> {
-            // TODO добавить переход на следующую Activity
+        booksAdapter = new BooksRecyclerAdapter((book) -> {
+
+            Intent intent = new Intent(this, DetailsActivity.class);
+            intent.putExtra(DetailsActivity.BOOK_ID_EXTRA, book.getId());
+            startActivity(intent);
+
         });
         recyclerView.setAdapter(booksAdapter);
 
