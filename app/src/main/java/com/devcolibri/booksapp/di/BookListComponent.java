@@ -2,10 +2,10 @@ package com.devcolibri.booksapp.di;
 
 import com.devcolibri.booksapp.MainActivity;
 
-import dagger.Component;
+import dagger.Subcomponent;
 
 @ActivityScope
-@Component(dependencies = AppComponent.class)
+@Subcomponent
 public interface BookListComponent {
     void inject(MainActivity mainActivity);
 }

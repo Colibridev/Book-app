@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import com.devcolibri.booksapp.di.AppComponent;
 import com.devcolibri.booksapp.di.AppModule;
 import com.devcolibri.booksapp.di.DaggerAppComponent;
-import com.devcolibri.booksapp.di.DaggerBookListComponent;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,11 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 .appModule(new AppModule(getApplicationContext()))
                 .build();
 
-        DaggerBookListComponent
-                .builder()
-                .appComponent(appComponent)
-                .build()
-                .inject(this);
+        appComponent.plusBookListComponent().inject(this);
         
         viewModel.getBooks().observe(this, books -> {
             booksAdapter.setItems(books);

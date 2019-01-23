@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.devcolibri.booksapp.di.AppComponent;
 import com.devcolibri.booksapp.di.AppModule;
 import com.devcolibri.booksapp.di.DaggerAppComponent;
-import com.devcolibri.booksapp.di.DaggerBookDetailsComponent;
 import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -39,11 +38,8 @@ public class DetailsActivity extends AppCompatActivity {
                 .appModule(new AppModule(getApplicationContext()))
                 .build();
 
-        DaggerBookDetailsComponent
-                .builder()
-                .appComponent(appComponent)
-                .build()
-                .inject(this);
+        appComponent.plusBookDetailsComponent().inject(this);
+
 
         viewModel.init(bookId);
         viewModel.getBook().observe(this, book -> {
