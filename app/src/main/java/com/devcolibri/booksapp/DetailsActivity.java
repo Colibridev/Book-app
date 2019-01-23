@@ -8,9 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.devcolibri.booksapp.di.AppComponent;
-import com.devcolibri.booksapp.di.AppModule;
-import com.devcolibri.booksapp.di.DaggerAppComponent;
 import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -33,12 +30,7 @@ public class DetailsActivity extends AppCompatActivity {
         long bookId = getIntent().getLongExtra(BOOK_ID_EXTRA, -1);
         if (bookId == -1) throw new IllegalArgumentException("Необходимо передать bookId параметр");
 
-        AppComponent appComponent = DaggerAppComponent
-                .builder()
-                .appModule(new AppModule(getApplicationContext()))
-                .build();
-
-        appComponent.plusBookDetailsComponent().inject(this);
+        App.getBookDetailsComponent().inject(this);
 
 
         viewModel.init(bookId);
@@ -51,5 +43,11 @@ public class DetailsActivity extends AppCompatActivity {
         titleTextView.setText(book.getTitle());
         descriptionTextView.setText(book.getDescription());
         Picasso.get().load(book.getImageUrl()).into(imageView);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        App.destroyBookDetailsComponent();
     }
 }

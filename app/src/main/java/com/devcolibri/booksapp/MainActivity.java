@@ -8,10 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.devcolibri.booksapp.di.AppComponent;
-import com.devcolibri.booksapp.di.AppModule;
-import com.devcolibri.booksapp.di.DaggerAppComponent;
-
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -34,15 +30,16 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(booksAdapter);
 
-        AppComponent appComponent = DaggerAppComponent
-                .builder()
-                .appModule(new AppModule(getApplicationContext()))
-                .build();
-
-        appComponent.plusBookListComponent().inject(this);
+        App.getBookListComponent().inject(this);
         
         viewModel.getBooks().observe(this, books -> {
             booksAdapter.setItems(books);
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        App.destroyBookListComponent();
     }
 }
