@@ -2,6 +2,7 @@ package com.devcolibri.booksapp;
 
 import javax.inject.Inject;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.devcolibri.booksapp.di.Injector;
+import com.devcolibri.booksapp.di.ViewModelFactory;
 import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -17,7 +19,7 @@ public class DetailsActivity extends AppCompatActivity {
     private ImageView imageView;
     public static String BOOK_ID_EXTRA = "bookId";
 
-    @Inject BookDetailsViewModel viewModel;
+    @Inject ViewModelFactory viewModelFactory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,7 +33,8 @@ public class DetailsActivity extends AppCompatActivity {
         long bookId = getIntent().getLongExtra(BOOK_ID_EXTRA, -1);
         if (bookId == -1) throw new IllegalArgumentException("Необходимо передать bookId параметр");
 
-        Injector.getBookDetailsComponent().inject(this);
+        Injector.getAppComponent().inject(this);
+        BookDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(BookDetailsViewModel.class);
 
 
         viewModel.init(bookId);
@@ -44,11 +47,5 @@ public class DetailsActivity extends AppCompatActivity {
         titleTextView.setText(book.getTitle());
         descriptionTextView.setText(book.getDescription());
         Picasso.get().load(book.getImageUrl()).into(imageView);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Injector.destroyBookDetailsComponent();
     }
 }

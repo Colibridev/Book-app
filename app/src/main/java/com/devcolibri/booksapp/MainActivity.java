@@ -2,6 +2,7 @@ package com.devcolibri.booksapp;
 
 import javax.inject.Inject;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +10,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.devcolibri.booksapp.di.Injector;
+import com.devcolibri.booksapp.di.ViewModelFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private BooksRecyclerAdapter booksAdapter;
-    @Inject BookListViewModel viewModel;
+    @Inject ViewModelFactory viewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +34,11 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(booksAdapter);
 
-        Injector.getBookListComponent().inject(this);
-        
+        Injector.getAppComponent().inject(this);
+
+        BookListViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(BookListViewModel.class);
         viewModel.getBooks().observe(this, books -> {
             booksAdapter.setItems(books);
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Injector.destroyBookListComponent();
     }
 }
