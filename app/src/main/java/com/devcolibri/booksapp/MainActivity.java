@@ -1,6 +1,7 @@
 package com.devcolibri.booksapp;
 
-import android.arch.lifecycle.ViewModelProviders;
+import javax.inject.Inject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private BooksRecyclerAdapter booksAdapter;
+    @Inject BookListViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(booksAdapter);
 
-        BookListViewModel viewModel = ViewModelProviders.of(this).get(BookListViewModel.class);
-        DaggerBookComponent.create().inject(viewModel);
+        DaggerBookComponent.create().inject(this);
         viewModel.getBooks().observe(this, books -> {
             booksAdapter.setItems(books);
         });
