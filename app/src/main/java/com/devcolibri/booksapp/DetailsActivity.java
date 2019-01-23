@@ -1,12 +1,15 @@
 package com.devcolibri.booksapp;
 
-import android.arch.lifecycle.ViewModelProviders;
+import javax.inject.Inject;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.devcolibri.booksapp.di.BookModule;
+import com.devcolibri.booksapp.di.DaggerBookComponent;
 import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -14,6 +17,8 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView descriptionTextView;
     private ImageView imageView;
     public static String BOOK_ID_EXTRA = "bookId";
+
+    @Inject BookDetailsViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,7 +32,12 @@ public class DetailsActivity extends AppCompatActivity {
         long bookId = getIntent().getLongExtra(BOOK_ID_EXTRA, -1);
         if (bookId == -1) throw new IllegalArgumentException("Необходимо передать bookId параметр");
 
-        BookDetailsViewModel viewModel = ViewModelProviders.of(this).get(BookDetailsViewModel.class);
+        DaggerBookComponent
+                .builder()
+                .bookModule(new BookModule(getApplicationContext()))
+                .build()
+                .inject(this);
+
         viewModel.init(bookId);
         viewModel.getBook().observe(this, book -> {
             displayBookInfo(book);

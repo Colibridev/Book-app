@@ -8,8 +8,12 @@ import android.os.AsyncTask;
 
 public class BookDetailsViewModel extends ViewModel {
     private MutableLiveData<Book> bookLiveData;
-    private BookRepository bookRepository = new BookRepository();
+    private BookRepository bookRepository;
     private long bookId;
+
+    public BookDetailsViewModel(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     public void init(long bookId) {
         this.bookId = bookId;

@@ -7,9 +7,9 @@ public class BookRepository {
     private BookService bookService;
     private BookDao bookDao;
 
-    public BookRepository() {
-        this.bookService = App.getRetrofit().create(BookService.class);
-        this.bookDao = App.getDb().getBookDao();
+    public BookRepository(BookService bookService, BookDao bookDao) {
+        this.bookService = bookService;
+        this.bookDao = bookDao;
     }
 
     public List<Book> getBooks() {

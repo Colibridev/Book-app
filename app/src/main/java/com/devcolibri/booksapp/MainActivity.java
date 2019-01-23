@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.devcolibri.booksapp.di.BookModule;
 import com.devcolibri.booksapp.di.DaggerBookComponent;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +33,12 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(booksAdapter);
 
-        DaggerBookComponent.create().inject(this);
+        DaggerBookComponent
+                .builder()
+                .bookModule(new BookModule(getApplicationContext()))
+                .build()
+                .inject(this);
+        
         viewModel.getBooks().observe(this, books -> {
             booksAdapter.setItems(books);
         });
