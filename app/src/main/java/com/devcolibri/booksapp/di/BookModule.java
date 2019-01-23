@@ -25,23 +25,6 @@ public class BookModule {
     }
 
     @Provides
-    BookRepository providesBookRepository(AppDatabase db, Retrofit retrofit) {
-        BookService bookService = retrofit.create(BookService.class);
-        BookDao bookDao = db.getBookDao();
-        return new BookRepository(bookService, bookDao);
-    }
-
-    @Provides
-    BookListViewModel providesBookListViewModel(BookRepository bookRepository) {
-        return new BookListViewModel(bookRepository);
-    }
-
-    @Provides
-    BookDetailsViewModel providesBookDetailsListViewModel(BookRepository bookRepository) {
-        return new BookDetailsViewModel(bookRepository);
-    }
-
-    @Provides
     AppDatabase providesAppDatabase() {
         return Room.databaseBuilder(applicationContext, AppDatabase.class, "book-database").build();
     }
@@ -52,5 +35,15 @@ public class BookModule {
                 .baseUrl(BookService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+    }
+
+    @Provides
+    BookService providesBookService(Retrofit retrofit) {
+        return retrofit.create(BookService.class);
+    }
+
+    @Provides
+    BookDao providesBookDao(AppDatabase database) {
+        return database.getBookDao();
     }
 }

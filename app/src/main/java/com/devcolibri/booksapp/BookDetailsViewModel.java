@@ -1,5 +1,7 @@
 package com.devcolibri.booksapp;
 
+import javax.inject.Inject;
+
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -11,6 +13,7 @@ public class BookDetailsViewModel extends ViewModel {
     private BookRepository bookRepository;
     private long bookId;
 
+    @Inject
     public BookDetailsViewModel(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }

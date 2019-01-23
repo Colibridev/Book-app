@@ -3,10 +3,13 @@ package com.devcolibri.booksapp;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class BookRepository {
     private BookService bookService;
     private BookDao bookDao;
 
+    @Inject
     public BookRepository(BookService bookService, BookDao bookDao) {
         this.bookService = bookService;
         this.bookDao = bookDao;

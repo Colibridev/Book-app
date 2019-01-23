@@ -2,6 +2,8 @@ package com.devcolibri.booksapp;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -12,6 +14,7 @@ public class BookListViewModel extends ViewModel {
     private MutableLiveData<List<Book>> booksLiveData;
     private BookRepository bookRepository;
 
+    @Inject
     public BookListViewModel(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
