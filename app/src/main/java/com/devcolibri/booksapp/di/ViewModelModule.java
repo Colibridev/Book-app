@@ -15,10 +15,10 @@ public abstract class ViewModelModule {
     @IntoMap
     @Binds
     @ViewModelKey(BookListViewModel.class)
-    public abstract ViewModel bookListViewModel(BookListViewModel bookListViewModel);
+    public abstract ViewModel providesBookListViewModel(BookListViewModel bookListViewModel);
 
     @IntoMap
     @Binds
     @ViewModelKey(BookDetailsViewModel.class)
-    public abstract ViewModel bookDetailsViewModel(BookDetailsViewModel bookDetailsViewModel);
+    public abstract ViewModel providesBookDetailsViewModel(BookDetailsViewModel bookDetailsViewModel);
 }

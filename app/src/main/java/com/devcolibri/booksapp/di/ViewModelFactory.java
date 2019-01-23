@@ -26,7 +26,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
         if(provider == null){
             throw new IllegalArgumentException(
-                    "Объект " + modelClass.getSimpleName() + "не может быть создан");
+                    "Объект " + modelClass.getSimpleName() + " не может быть создан");
         }
         return (T) provider.get();
     }
