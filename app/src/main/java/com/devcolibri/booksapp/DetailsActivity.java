@@ -29,9 +29,7 @@ public class DetailsActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image_view);
 
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                                              AppDatabase.class, "book-database").build();
-        bookDao = db.getBookDao();
+        bookDao = App.getDb().getBookDao();
 
         long bookId = getIntent().getLongExtra(BOOK_ID_EXTRA, -1);
         if(bookId == -1) throw new IllegalArgumentException("Необходимо передать bookId параметр");

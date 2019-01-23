@@ -39,15 +39,9 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(booksAdapter);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BookService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        bookService = retrofit.create(BookService.class);
-
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "book-database").build();
-        bookDao = db.getBookDao();
+        bookService = App.getRetrofit().create(BookService.class);
+        bookDao = App.getDb().getBookDao();
 
         loadBooks();
     }
