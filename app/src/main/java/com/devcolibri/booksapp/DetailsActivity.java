@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.devcolibri.booksapp.di.BookModule;
+import com.devcolibri.booksapp.di.AppComponent;
+import com.devcolibri.booksapp.di.AppModule;
+import com.devcolibri.booksapp.di.DaggerAppComponent;
 import com.devcolibri.booksapp.di.DaggerBookComponent;
 import com.squareup.picasso.Picasso;
 
@@ -32,9 +34,14 @@ public class DetailsActivity extends AppCompatActivity {
         long bookId = getIntent().getLongExtra(BOOK_ID_EXTRA, -1);
         if (bookId == -1) throw new IllegalArgumentException("Необходимо передать bookId параметр");
 
+        AppComponent appComponent = DaggerAppComponent
+                .builder()
+                .appModule(new AppModule(getApplicationContext()))
+                .build();
+
         DaggerBookComponent
                 .builder()
-                .bookModule(new BookModule(getApplicationContext()))
+                .appComponent(appComponent)
                 .build()
                 .inject(this);
 

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class BookRepository {
     private BookService bookService;
     private BookDao bookDao;

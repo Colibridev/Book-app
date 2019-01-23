@@ -5,9 +5,6 @@ import android.content.Context;
 
 import com.devcolibri.booksapp.AppDatabase;
 import com.devcolibri.booksapp.BookDao;
-import com.devcolibri.booksapp.BookDetailsViewModel;
-import com.devcolibri.booksapp.BookListViewModel;
-import com.devcolibri.booksapp.BookRepository;
 import com.devcolibri.booksapp.BookService;
 
 import dagger.Module;
@@ -16,11 +13,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-public class BookModule {
+public class AppModule {
 
     private Context applicationContext;
 
-    public BookModule(Context applicationContext) {
+    public AppModule(Context applicationContext) {
         this.applicationContext = applicationContext;
     }
 

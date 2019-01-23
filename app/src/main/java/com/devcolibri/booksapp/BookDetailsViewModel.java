@@ -8,6 +8,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
 
+import com.devcolibri.booksapp.di.ActivityScope;
+
+@ActivityScope
 public class BookDetailsViewModel extends ViewModel {
     private MutableLiveData<Book> bookLiveData;
     private BookRepository bookRepository;

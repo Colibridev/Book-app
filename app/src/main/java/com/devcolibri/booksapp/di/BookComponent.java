@@ -5,7 +5,8 @@ import com.devcolibri.booksapp.MainActivity;
 
 import dagger.Component;
 
-@Component(modules = BookModule.class)
+@ActivityScope
+@Component(dependencies = AppComponent.class)
 public interface BookComponent {
     void inject(MainActivity mainActivity);
     void inject(DetailsActivity detailsActivity);
