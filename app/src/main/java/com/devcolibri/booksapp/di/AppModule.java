@@ -1,5 +1,7 @@
 package com.devcolibri.booksapp.di;
 
+import javax.inject.Singleton;
+
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
@@ -22,11 +24,13 @@ public class AppModule {
     }
 
     @Provides
+    @Singleton
     AppDatabase providesAppDatabase() {
         return Room.databaseBuilder(applicationContext, AppDatabase.class, "book-database").build();
     }
 
     @Provides
+    @Singleton
     Retrofit providesRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(BookService.BASE_URL)
@@ -35,11 +39,13 @@ public class AppModule {
     }
 
     @Provides
+    @Singleton
     BookService providesBookService(Retrofit retrofit) {
         return retrofit.create(BookService.class);
     }
 
     @Provides
+    @Singleton
     BookDao providesBookDao(AppDatabase database) {
         return database.getBookDao();
     }
