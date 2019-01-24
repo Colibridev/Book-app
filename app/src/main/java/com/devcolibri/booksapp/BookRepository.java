@@ -8,18 +8,18 @@ import javax.inject.Singleton;
 
 @Singleton
 public class BookRepository {
-    private BookService bookService;
+    private HttpClient httpClient;
     private BookDao bookDao;
 
     @Inject
-    public BookRepository(BookService bookService, BookDao bookDao) {
-        this.bookService = bookService;
+    public BookRepository(HttpClient httpClient, BookDao bookDao) {
+        this.httpClient = httpClient;
         this.bookDao = bookDao;
     }
 
     public List<Book> getBooks() {
         try {
-            List<Book> books = bookService.getBooks().execute().body();
+            List<Book> books = httpClient.getBooks();
             bookDao.insertBooks(books);
             return bookDao.getBooks();
         } catch (IOException e) {
