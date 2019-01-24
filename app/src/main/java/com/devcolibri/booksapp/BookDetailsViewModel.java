@@ -1,22 +1,26 @@
 package com.devcolibri.booksapp;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 
-import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.os.AsyncTask;
 
 public class BookDetailsViewModel extends ViewModel {
-    private MutableLiveData<Book> bookLiveData;
     private BookRepository bookRepository;
+    private Executor executor;
+
+    private MutableLiveData<Book> bookLiveData;
     private long bookId;
 
     @Inject
-    public BookDetailsViewModel(BookRepository bookRepository) {
+    public BookDetailsViewModel(BookRepository bookRepository, Executor executor) {
         this.bookRepository = bookRepository;
+        this.executor = executor;
     }
+
 
     public void init(long bookId) {
         this.bookId = bookId;
@@ -30,19 +34,12 @@ public class BookDetailsViewModel extends ViewModel {
         return bookLiveData;
     }
 
-    @SuppressLint("StaticFieldLeak")
     private void loadBook() {
-        new AsyncTask<Void, Void, Book>() {
-            @Override
-            protected Book doInBackground(Void... voids) {
-                return bookRepository.getBook(bookId);
-            }
+        executor.execute(() -> {
 
-            @Override
-            protected void onPostExecute(Book book) {
-                bookLiveData.setValue(book);
-            }
+            Book book = bookRepository.getBook(bookId);
+            bookLiveData.postValue(book);
 
-        }.execute();
+        });
     }
 }
