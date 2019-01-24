@@ -1,5 +1,8 @@
 package com.devcolibri.booksapp.di;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javax.inject.Singleton;
 
 import android.arch.persistence.room.Room;
@@ -48,5 +51,12 @@ public class AppModule {
     @Singleton
     BookDao providesBookDao(AppDatabase database) {
         return database.getBookDao();
+    }
+
+    @Provides
+    @Singleton
+    Executor providesExecutor() {
+        int numberOfCores = Runtime.getRuntime().availableProcessors();
+        return Executors.newFixedThreadPool(numberOfCores);
     }
 }

@@ -36,4 +36,26 @@ public class Book {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final Book book = (Book) o;
+
+        if (id != book.id) return false;
+        if (!imageUrl.equals(book.imageUrl)) return false;
+        if (!title.equals(book.title)) return false;
+        return description.equals(book.description);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + imageUrl.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + description.hashCode();
+        return result;
+    }
 }
